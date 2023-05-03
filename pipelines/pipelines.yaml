@@ -1,0 +1,75 @@
+pipeline {
+    parameters {
+        string(name: 'AWS_REGION', defaultValue: 'us-west-2', description: 'AWS Region')
+        string(name: 'ECR_REPO_NAME', defaultValue: 'my-ecr-repo', description: 'ECR repository name')
+        string(name: 'IMAGE_TAG', defaultValue: 'latest', description: 'Docker image tag')
+        string(name: 'APP_HOST', defaultValue: 'app.example.com', description: 'Hostname or IP address of the app host')
+    }
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'my-credentials-id', url: 'git@github.com:my-org/my-repo.git']]])
+            }
+        }
+
+        stage('Build and Publish') {
+            environment {
+                DOCKER_IMAGE = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO_NAME}:${IMAGE_TAG}"
+            }
+            steps {
+                script {
+                    withCredentials([sshUserPrivateKey(credentialsId: 'my-ssh-credentials-id', keyFileVariable: 'SSH_KEY_FILE')]) {
+                        sh "docker build -t ${DOCKER_IMAGE} ."
+                        sh "docker login -u AWS -p $(aws ecr get-login-password --region ${AWS_REGION}) ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
+                        sh "docker push ${DOCKER_IMAGE}"
+                    }
+                }
+            }
+        }
+
+        stage('Deploy to App Host') {
+            steps {
+                script {
+                    withCredentials([sshUserPrivateKey(credentialsId: 'my-ssh-credentials-id', keyFileVariable: 'SSH_KEY_FILE')]) {
+                        def container_name = "my-app-container"
+                        sshagent(['my-ssh-credentials-id']) {
+                            sshCommand remote: "root@${APP_HOST}", command: """
+                                if docker ps -f "name=${container_name}" --format "{{.Names}}" | grep -q ${container_name}; then
+                                    echo "Stopping existing container"
+                                    docker stop ${container_name}
+                                fi
+                                docker run -d --name ${container_name} -p 8080:8080 ${DOCKER_IMAGE}
+                            """
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+# Subtask 2	
+# Create a Jenkinsfile in the repository.
+
+ 
+
+# It should define at least 2 stages -
+# Stage 1: This stage should contain the steps to git checkout the repository containing the docker file and the application code. 
+# Stage 2: This stage should contain the steps to build a docker image of the node application and then publish the image to the ECR repository created in the previous task.
+# Create a pipeline job in Jenkins which pulls your git repo and uses the Jenkinsfile for building.
+# Hint: docker-workflow, git and ssh plugins might be needed in Jenkins
+
+
+# Make use of variables and parameters in the Jenkins file. 
+ 
+
+# Subtask 3	
+# Add another stage (deploy to app host) in Jenkinsfile which deploys the new container in the’ app’ host.
+
+# 1 suggested way for this stage is: stage should ssh into app host (root user), check if older image container is running and stop it, run new image container.
+ 
+
+# Hint: Having a static name to the container can be helpful in checking if the container is already running. 

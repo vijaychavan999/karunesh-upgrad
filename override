@@ -1,0 +1,100 @@
+<!-- Access key ID	Secret access key
+AKIAU74VM7PLBWFNE7PW	0TvX/jzBSPisfJaAPryzYKLZ0oACBxxCua07IGW4
+
+
+#upgrad
+
+> aws sts get-caller-identity
+
+{
+    "UserId": "AIDAU74VM7PLJ7HCTX4J3",
+    "Account": "343373839318",
+    "Arn": "arn:aws:iam::343373839318:user/upgradkaruneshshanker"
+}
+
+
+Apply complete! Resources: 5 added, 0 changed, 0 destroyed.
+
+Outputs:
+
+private_subnet_ids = [
+  "subnet-073e75ee584a442fa",
+  "subnet-0917bcb2c65dbb203",
+]
+public_subnet_ids = [
+  "subnet-0253b25f1f8e52366",
+  "subnet-0818c58ee0e4e28f4",
+]
+vpc_id = "vpc-0a8475709db4dec6f"
+
+
+
+
+For 3 EC2 instances for bastion, Jenkins, app & ALB. As part of this subtask, you are required to create security groups for them.
+
+Create Security Groups(SGs) for the following resources: 
+
+Bastion host SG - Allow self ip to ssh to ‘bastion’ instance and allow all egress.
+Private Instances SG - Allow all incoming traffic from within VPC and all egress.
+Public Web SG - Allow incoming to port 80 from self IP and all egress.
+
+Create a key pair that will be used by the users to access the EC2 instances.
+Create 3 ec2 instances with the names - bastion, Jenkins, app- using Ubuntu-20 official AMI.
+Only the ‘bastion’ instance should be directly accessible over the internet. 
+SG created earlier should be used to allow the users to have ssh access to the bastion host from self ip.
+
+
+ericssonpfhelpdesk@dkmonline.com
+pooja@dkmonline.com
+ericssonpfhelpdesk@dkmonline.com
+
+
+
+Apply complete! Resources: 4 added, 1 changed, 0 destroyed.
+
+Outputs:
+
+private_subnet_ids = [
+  "subnet-073e75ee584a442fa",
+  "subnet-0917bcb2c65dbb203",
+]
+public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDgDeBtMMlFYksUh7RNQwOfJix2uM9QZxEPqEs5op/U9xZuma0x5X2uyOxRXK7hEoGzyKSyEqRFfTAyIEJ18RiPYKnjmcQv6s1cAeTjNkVhpjI9vstLKkk/srUmgHeAJBkCYmgqqSm69SsDXKMuPzqPUKY1SXxq5VbbDd4Gv4sSm9ao2rn2xaqD2FsIxzUu06pf8ddmzy8rsIMRfxnxl47Sw4oS8n7w6XJN+luVNSTEmOWxXJfhGnvz9Uz8kS5fIBrzEEsTYocbypHDfpe3Txnas+j966//TuOecPTlL30Azn/Z1BXhuay2uz1MnsXQ0tlebwzP4UJnhowUJk0Bpm9L"
+public_subnet_ids = [
+  "subnet-0253b25f1f8e52366",
+  "subnet-0818c58ee0e4e28f4",
+]
+vpc_id = "vpc-0a8475709db4dec6f"
+
+
+
+Apply complete! Resources: 1 added, 1 changed, 0 destroyed.
+
+Outputs:
+
+private_subnet_ids = [
+  "subnet-073e75ee584a442fa",
+  "subnet-0917bcb2c65dbb203",
+]
+public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDgDeBtMMlFYksUh7RNQwOfJix2uM9QZxEPqEs5op/U9xZuma0x5X2uyOxRXK7hEoGzyKSyEqRFfTAyIEJ18RiPYKnjmcQv6s1cAeTjNkVhpjI9vstLKkk/srUmgHeAJBkCYmgqqSm69SsDXKMuPzqPUKY1SXxq5VbbDd4Gv4sSm9ao2rn2xaqD2FsIxzUu06pf8ddmzy8rsIMRfxnxl47Sw4oS8n7w6XJN+luVNSTEmOWxXJfhGnvz9Uz8kS5fIBrzEEsTYocbypHDfpe3Txnas+j966//TuOecPTlL30Azn/Z1BXhuay2uz1MnsXQ0tlebwzP4UJnhowUJk0Bpm9L"
+public_subnet_ids = [
+  "subnet-0253b25f1f8e52366",
+  "subnet-0818c58ee0e4e28f4",
+]
+vpc_id = "vpc-0a8475709db4dec6f"
+
+[servers]
+server1 ansible_host=10.0.3.73
+server2 ansible_host=10.0.3.127
+~
+
+
+[private_ec2_instances]
+10.0.3.73 ansible_user=ubuntu ansible_ssh_private_key_file=/path/to/kst-upgrad-devops.pem
+
+
+
+
+Create a Jenkinsfile in the repository.
+
+ 
+ -->
