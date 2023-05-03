@@ -1,16 +1,3 @@
-<!-- Access key ID	Secret access key
-AKIAU74VM7PLBWFNE7PW	0TvX/jzBSPisfJaAPryzYKLZ0oACBxxCua07IGW4
-
-
-#upgrad
-
-> aws sts get-caller-identity
-
-{
-    "UserId": "AIDAU74VM7PLJ7HCTX4J3",
-    "Account": "343373839318",
-    "Arn": "arn:aws:iam::343373839318:user/upgradkaruneshshanker"
-}
 
 
 Apply complete! Resources: 5 added, 0 changed, 0 destroyed.
